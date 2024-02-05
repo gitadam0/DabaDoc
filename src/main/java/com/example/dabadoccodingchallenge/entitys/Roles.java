@@ -15,12 +15,14 @@ import java.util.List;
 public class Roles {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @Column(name = "username")
+    private String username;
 
-    @Column(name = "role_name")
-    private String roleName;
+    @Column(name = "role", nullable = false)
+    private String role;
 
-    // Add any other fields or methods as needed
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "username")
+    private User user;
 }
