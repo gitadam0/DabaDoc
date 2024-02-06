@@ -1,5 +1,6 @@
 package com.example.dabadoccodingchallenge.config;
 
+import com.example.dabadoccodingchallenge.exceptions.AppException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,9 +28,22 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             String[] authElms =header.split(" ");
             if (authElms.length==2 && "Bearer".equals(authElms[0])){
                 try{
-                    SecurityContextHolder.getContext()
-                            .setAuthentication(userAuthProvider.validateToken(authElms[1]));
-                }catch (RuntimeException e){
+
+                    if("GET".equals(request.getMethod())){
+                        SecurityContextHolder.getContext()
+                                .setAuthentication(userAuthProvider.validateToken(authElms[1]));
+
+                    } else {
+                        try {
+                            SecurityContextHolder.getContext()
+                                    .setAuthentication(userAuthProvider.validateTokenStrenght(authElms[1]));
+                        } catch (AppException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    }
+
+                    }catch (RuntimeException e){
                     SecurityContextHolder.clearContext();
                     throw e;
                 }

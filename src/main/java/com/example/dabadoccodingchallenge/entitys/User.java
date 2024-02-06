@@ -22,7 +22,8 @@ public class User {
     @Column(name = "enabled", nullable = false)
     private Boolean enabled;
 
-    // Getters and setters
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Question> questions = new HashSet<>();
 }
 
 
