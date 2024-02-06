@@ -1,5 +1,6 @@
 package com.example.dabadoccodingchallenge.entitys;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,9 +23,12 @@ public class Question {
     private String location;
 
     @ManyToOne
+
+
     @JoinColumn(name = "username", nullable = false)
     private User user;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private Set<Answer> answers = new HashSet<>();
 

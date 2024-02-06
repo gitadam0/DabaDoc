@@ -1,5 +1,6 @@
 package com.example.dabadoccodingchallenge.entitys;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,13 +15,14 @@ public class Answer {
     private Long id;
 
     @Column(name = "content", nullable = false)
-    private String content;
+    private String answer;
 
     @ManyToOne
     @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "username", nullable = false)
     private User user;
 }
