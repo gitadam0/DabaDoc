@@ -29,12 +29,10 @@ public class QuestionServiceImpl implements QuestionService {
     public void deleteQuestion(Long id) {
         questionRepository.deleteById(id);
     }
-
     @Override
     public Question getQuestionByID(long id) throws AppException {
         return questionRepository.findById(id).orElseThrow(()->new AppException("question not found for "+id, HttpStatus.NOT_FOUND));
     }
-
     @Override
     public Question updateQuestion(long id, Question newQuestion) {
         return null;

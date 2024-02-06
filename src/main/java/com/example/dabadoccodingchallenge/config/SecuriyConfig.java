@@ -38,11 +38,6 @@ public class SecuriyConfig {
         http.addFilterBefore(new JwtAuthFilter(userAuthProvider), BasicAuthenticationFilter.class);
         http.authorizeHttpRequests(configurer ->
                 configurer
-                        //.requestMatchers(HttpMethod.GET,"/auth").hasAnyRole("USER","ADMIN")
-                        //.requestMatchers(HttpMethod.GET,"/auth/get").hasAnyRole("USER","ADMIN")
-                        /*.requestMatchers(HttpMethod.POST,"/dabadoc/users").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/dabadoc/users").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/dabadoc/users/**").hasRole("ADMIN")*/
                         .requestMatchers(HttpMethod.POST,"/login").permitAll()
                         .anyRequest().permitAll()
 
@@ -57,29 +52,6 @@ public class SecuriyConfig {
 
         return http.build();
     }
-
-
-
- /*   @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-//        config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
-        config.addAllowedMethod("*");
-//        config.addAllowedHeader("*");
-        config.setAllowedMethods(Arrays.asList(
-                HttpMethod.GET.name(),
-                HttpMethod.POST.name(),
-                HttpMethod.PUT.name(),
-                HttpMethod.DELETE.name()
-        ));
-//        config.setMaxAge(3600L);
-        source.registerCorsConfiguration("/**", config);
-
-        return source;
-    }*/
-
 
 
     @Bean

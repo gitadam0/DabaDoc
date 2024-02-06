@@ -16,6 +16,5 @@ public interface QuestionService {
 
     public Question updateQuestion(long id,Question newQuestion) ;
 
-
     public Question createQuestion(Question catalogue);
 }
