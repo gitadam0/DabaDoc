@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -13,6 +15,11 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 public class Question {
+
+    // for setting the id of the answer in transformer
+    public Question(Long id){
+        this.id=id;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,13 +30,11 @@ public class Question {
     private String location;
 
     @ManyToOne
-
-
     @JoinColumn(name = "username", nullable = false)
     private User user;
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    private Set<Answer> answers = new HashSet<>();
+    private List<Answer> answers = new ArrayList<>();
 
 }

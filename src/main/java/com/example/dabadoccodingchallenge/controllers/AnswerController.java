@@ -1,6 +1,7 @@
 package com.example.dabadoccodingchallenge.controllers;
 
 
+import com.example.dabadoccodingchallenge.dto_s.AnswerDTO;
 import com.example.dabadoccodingchallenge.entitys.Answer;
 import com.example.dabadoccodingchallenge.exceptions.AppException;
 import com.example.dabadoccodingchallenge.services.answerService.AnswerService;
@@ -20,7 +21,7 @@ public class AnswerController {
         this.answerService=answerService;
     }
     @GetMapping()
-    public List<Answer> getAllAnswers(){
+    public List<AnswerDTO> getAllAnswers(){
         return answerService.getAnswers() ;
     }
     @GetMapping("/{id}")
@@ -29,8 +30,8 @@ public class AnswerController {
     }
 
     @PostMapping()
-    public Answer createAnswer(@RequestBody Answer answer){
-        return answerService.createAnswer(answer) ;
+    public Answer createAnswer(@RequestBody AnswerDTO answerDTO) throws AppException {
+        return answerService.createAnswer(answerDTO) ;
     }
 
 

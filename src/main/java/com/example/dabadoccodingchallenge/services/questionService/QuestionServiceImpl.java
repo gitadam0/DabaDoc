@@ -2,9 +2,11 @@ package com.example.dabadoccodingchallenge.services.questionService;
 
 
 
+import com.example.dabadoccodingchallenge.dto_s.QuestionDTO;
 import com.example.dabadoccodingchallenge.entitys.Question;
 import com.example.dabadoccodingchallenge.exceptions.AppException;
 import com.example.dabadoccodingchallenge.repositorys.QuestionRepository;
+import com.example.dabadoccodingchallenge.transformers.QuestionTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,8 +23,8 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<Question> getQuestions() {
-        return questionRepository.findAll();
+    public List<QuestionDTO> getQuestions() {
+        return QuestionTransformer.toDtoList(questionRepository.findAll());
     }
 
     @Override

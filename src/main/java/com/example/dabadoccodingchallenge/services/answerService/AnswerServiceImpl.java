@@ -2,9 +2,11 @@ package com.example.dabadoccodingchallenge.services.answerService;
 
 
 
+import com.example.dabadoccodingchallenge.dto_s.AnswerDTO;
 import com.example.dabadoccodingchallenge.entitys.Answer;
 import com.example.dabadoccodingchallenge.exceptions.AppException;
 import com.example.dabadoccodingchallenge.repositorys.AnswerRepository;
+import com.example.dabadoccodingchallenge.transformers.AnswerTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,8 +23,9 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    public List<Answer> getAnswers() {
-        return answerRepository.findAll();
+    public List<AnswerDTO> getAnswers() {
+        List<Answer> answers=answerRepository.findAll();
+        return AnswerTransformer.toDtoList(answers);
     }
 
     @Override
@@ -41,7 +44,8 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    public Answer createAnswer(Answer answer) {
+    public Answer createAnswer(AnswerDTO answerDTO) throws AppException {
+        Answer answer= AnswerTransformer.toEntity(answerDTO);
         return answerRepository.save(answer);
     }
 }

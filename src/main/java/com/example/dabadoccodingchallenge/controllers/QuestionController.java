@@ -1,6 +1,7 @@
 package com.example.dabadoccodingchallenge.controllers;
 
 
+import com.example.dabadoccodingchallenge.dto_s.QuestionDTO;
 import com.example.dabadoccodingchallenge.entitys.Question;
 import com.example.dabadoccodingchallenge.exceptions.AppException;
 import com.example.dabadoccodingchallenge.services.questionService.QuestionService;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/questions")
+@CrossOrigin("http://localhost:4200")
 public class QuestionController {
 
     private QuestionService questionService;
@@ -20,7 +22,7 @@ public class QuestionController {
         this.questionService=questionService;
     }
     @GetMapping()
-    public List<Question> getAllQuestions(){
+    public List<QuestionDTO> getAllQuestions(){
         return questionService.getQuestions() ;
     }
     @GetMapping("/{id}")

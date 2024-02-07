@@ -8,6 +8,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.sql.DataSource;
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -29,33 +31,60 @@ import java.util.Arrays;
 public class SecuriyConfig {
 
     private final UserAuthProvider userAuthProvider;
+
     @Autowired
     public SecuriyConfig(UserAuthProvider userAuthProvider) {
         this.userAuthProvider = userAuthProvider;
     }
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http.addFilterBefore(new JwtAuthFilter(userAuthProvider), BasicAuthenticationFilter.class);
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .addFilterBefore(new JwtAuthFilter(userAuthProvider), BasicAuthenticationFilter.class);
         http.authorizeHttpRequests(configurer ->
                 configurer
-                        .requestMatchers(HttpMethod.POST,"/login").permitAll()
+                        //.requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .anyRequest().permitAll()
 
-                );
+        );
         http.httpBasic(Customizer.withDefaults());
-        http.cors(cors -> cors.disable());
-        http.csrf(csrf->csrf.disable());
-        http.sessionManagement(custmizer->{
-           custmizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        //http.cors(Customizer.withDefaults());
+        http.cors(cors->cors.disable());
+        http.sessionManagement(custmizer -> {
+            custmizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         });
 
 
         return http.build();
     }
+    /*@Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(Customizer.withDefaults())
+                .addFilterBefore(new JwtAuthFilter(userAuthProvider), BasicAuthenticationFilter.class)
+                .authorizeHttpRequests(configurer ->
+                        configurer
+                                .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                                .anyRequest().permitAll()
+
+                )
+                .httpBasic(Customizer.withDefaults())
+
+                //http.cors(Customizer.withDefaults());
+                .sessionManagement(custmizer -> {
+                    custmizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                });
+
+
+        return http.build();
+    }*/
 
 
     @Bean
-    public UserDetailsManager userDetailsManager(DataSource dataSource){
+    public UserDetailsManager userDetailsManager(DataSource dataSource) {
 
         JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
         jdbcUserDetailsManager.setUsersByUsernameQuery(
@@ -70,11 +99,12 @@ public class SecuriyConfig {
     }
 
 
-
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
         //return NoOpPasswordEncoder.getInstance();
     }
+
+
 
 }
